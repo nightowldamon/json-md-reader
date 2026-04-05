@@ -1,0 +1,58 @@
+{
+  "name": "jmd",
+  "version": "1.0.0",
+  "description": "Beautiful CLI reader for JSON and Markdown files",
+  "type": "module",
+  "bin": {
+    "jmd": "./dist/index.js"
+  },
+  "scripts": {
+    "build:cli": "tsup",
+    "build:web": "vite build",
+    "build": "tsup && vite build",
+    "dev:cli": "tsx src/cli/index.ts",
+    "dev:web": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --write src/"
+  },
+  "keywords": [
+    "cli",
+    "json",
+    "markdown",
+    "reader",
+    "pretty-print"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "marked": "^15.0.12",
+    "marked-terminal": "^7.3.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-json-view-lite": "^2.5.0",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.1",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/marked-terminal": "^6.1.1",
+    "@types/node": "^25.5.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "@vitejs/plugin-react": "^6.0.1",
+    "tailwindcss": "^4.2.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.3",
+    "vitest": "^4.1.2"
+  }
+}
