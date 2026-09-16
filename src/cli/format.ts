@@ -1,7 +1,9 @@
 import chalk from "chalk";
-import { marked } from "marked";
+import { type MarkedExtension, marked } from "marked";
 import { markedTerminal } from "marked-terminal";
 
+// @types/marked-terminal@6 is typed against marked <12; this project is on
+// marked 15, so the renderer needs a cast. Runtime behaviour is unaffected.
 marked.use(
 	markedTerminal({
 		heading: chalk.bold.underline,
@@ -11,7 +13,7 @@ marked.use(
 		code: chalk.gray,
 		listitem: chalk.white,
 		showSectionPrefix: true,
-	}),
+	}) as MarkedExtension,
 );
 
 /** Syntax-highlight JSON for terminal output */
@@ -20,10 +22,21 @@ export function highlightJson(value: unknown, compact = false): string {
 	if (raw === undefined) return chalk.gray("undefined");
 
 	return raw.replace(
-		/("(?:\\.|[^"\\])*")\s*(:)?|(\b(?:true|false|null)\b)|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
-		(match, str: string | undefined, colon: string | undefined, bool: string | undefined, num: string | undefined) => {
+		/("(?:\\.|[^"\\])*")(\s*)(:)?|(\b(?:true|false|null)\b)|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)/g,
+		(
+			match,
+			str: string | undefined,
+			gap: string | undefined,
+			colon: string | undefined,
+			bool: string | undefined,
+			num: string | undefined,
+		) => {
 			if (str) {
-				return colon ? chalk.cyan(str) + chalk.white(":") : chalk.green(str);
+				// `gap` is the whitespace the pattern had to consume to look for a
+				// colon — always put it back, or indentation collapses.
+				return colon
+					? chalk.cyan(str) + gap + chalk.white(":")
+					: chalk.green(str) + gap;
 			}
 			if (bool) return chalk.yellow(bool);
 			if (num) return chalk.magenta(num);

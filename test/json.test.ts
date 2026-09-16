@@ -25,6 +25,26 @@ describe("parseJson", () => {
 		expect(parseJson(input)).toEqual({ a: 1 });
 	});
 
+	it("keeps // inside string values (URLs)", () => {
+		const input = '{"url": "https://example.com/a//b"}';
+		expect(parseJson(input)).toEqual({ url: "https://example.com/a//b" });
+	});
+
+	it("keeps /* */ inside string values", () => {
+		const input = '{"pattern": "/* not a comment */"}';
+		expect(parseJson(input)).toEqual({ pattern: "/* not a comment */" });
+	});
+
+	it("keeps comment markers in escaped strings", () => {
+		const input = String.raw`{"a": "quote:\" //b"}`;
+		expect(parseJson(input)).toEqual({ a: 'quote:" //b' });
+	});
+
+	it("strips a comment that follows a string value", () => {
+		const input = '{"url": "https://x.com" // trailing\n}';
+		expect(parseJson(input)).toEqual({ url: "https://x.com" });
+	});
+
 	it("throws on invalid JSON", () => {
 		expect(() => parseJson("not json")).toThrow();
 	});
@@ -80,6 +100,21 @@ describe("highlightJson", () => {
 	it("handles undefined input", () => {
 		const result = highlightJson(undefined);
 		expect(result).toContain("undefined");
+	});
+
+	it("preserves indentation after string values", () => {
+		// Strings are followed by whitespace the colon-lookahead must not eat
+		const result = highlightJson({ a: "x", b: { c: "y" } });
+		// biome-ignore lint/suspicious/noControlCharactersInRegex: strip ANSI codes
+		const plain = result.replace(/\u001b\[\d+m/g, "");
+		expect(plain).toBe(JSON.stringify({ a: "x", b: { c: "y" } }, null, 2));
+	});
+
+	it("preserves indentation after string array items", () => {
+		const result = highlightJson({ tags: ["a", "b"] });
+		// biome-ignore lint/suspicious/noControlCharactersInRegex: strip ANSI codes
+		const plain = result.replace(/\u001b\[\d+m/g, "");
+		expect(plain).toBe(JSON.stringify({ tags: ["a", "b"] }, null, 2));
 	});
 
 	it("produces compact output when requested", () => {
