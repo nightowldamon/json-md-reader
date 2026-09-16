@@ -19,55 +19,61 @@ program
 	.option("-f, --frontmatter", "Extract and display YAML frontmatter as JSON")
 	.option("--json", "Force treat input as JSON (useful with stdin)")
 	.option("--md", "Force treat input as Markdown (useful with stdin)")
-	.action(async (filePath: string | undefined, query: string | undefined, options: {
-		raw?: boolean;
-		compact?: boolean;
-		frontmatter?: boolean;
-		json?: boolean;
-		md?: boolean;
-	}) => {
-		try {
-			let content: string;
-			let fileType: ReturnType<typeof detectByExtension>;
+	.action(
+		async (
+			filePath: string | undefined,
+			query: string | undefined,
+			options: {
+				raw?: boolean;
+				compact?: boolean;
+				frontmatter?: boolean;
+				json?: boolean;
+				md?: boolean;
+			},
+		) => {
+			try {
+				let content: string;
+				let fileType: ReturnType<typeof detectByExtension>;
 
-			if (filePath) {
-				const absPath = path.resolve(filePath);
-				content = await fs.readFile(absPath, "utf-8");
-				fileType = detectByExtension(absPath);
+				if (filePath) {
+					const absPath = path.resolve(filePath);
+					content = await fs.readFile(absPath, "utf-8");
+					fileType = detectByExtension(absPath);
+
+					if (fileType === "unknown") {
+						fileType = detectByContent(content);
+					}
+				} else {
+					content = await readStdin();
+					if (!content) {
+						program.help();
+						return;
+					}
+					fileType = "unknown";
+				}
+
+				if (options.json) fileType = "json";
+				if (options.md) fileType = "markdown";
 
 				if (fileType === "unknown") {
 					fileType = detectByContent(content);
 				}
-			} else {
-				content = await readStdin();
-				if (!content) {
-					program.help();
-					return;
+
+				if (fileType === "json") {
+					handleJson(content, query, options);
+				} else if (fileType === "markdown") {
+					handleMarkdown(content, options);
+				} else {
+					console.log(chalk.yellow("Unknown file type. Showing raw content:"));
+					console.log(content);
 				}
-				fileType = "unknown";
+			} catch (err) {
+				const msg = err instanceof Error ? err.message : String(err);
+				console.error(chalk.red("Error:"), msg);
+				process.exit(1);
 			}
-
-			if (options.json) fileType = "json";
-			if (options.md) fileType = "markdown";
-
-			if (fileType === "unknown") {
-				fileType = detectByContent(content);
-			}
-
-			if (fileType === "json") {
-				handleJson(content, query, options);
-			} else if (fileType === "markdown") {
-				handleMarkdown(content, options);
-			} else {
-				console.log(chalk.yellow("Unknown file type. Showing raw content:"));
-				console.log(content);
-			}
-		} catch (err) {
-			const msg = err instanceof Error ? err.message : String(err);
-			console.error(chalk.red("Error:"), msg);
-			process.exit(1);
-		}
-	});
+		},
+	);
 
 function handleJson(
 	content: string,
@@ -104,17 +110,20 @@ function handleMarkdown(
 		return;
 	}
 
+	// --raw echoes the source verbatim, frontmatter block included — printing
+	// the parsed body here would silently drop it.
+	if (options.raw) {
+		console.log(content);
+		return;
+	}
+
 	if (frontmatter) {
 		console.log(chalk.dim("--- frontmatter ---"));
 		console.log(highlightJson(frontmatter));
 		console.log(chalk.dim("---\n"));
 	}
 
-	if (options.raw) {
-		console.log(body);
-	} else {
-		console.log(renderMarkdown(body));
-	}
+	console.log(renderMarkdown(body));
 }
 
 program.parse();
