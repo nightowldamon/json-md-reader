@@ -135,4 +135,4 @@ npm run build:web                # build web only → dist-web/
 
 ## License
 
-ISC
+ISC © 2026 nightowldamon — see [LICENSE](LICENSE).

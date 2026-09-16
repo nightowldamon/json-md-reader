@@ -1,5 +1,9 @@
 import { useCallback, useState } from "react";
-import { detectByContent, detectByExtension, type FileType } from "../../lib/detect.js";
+import {
+	detectByContent,
+	detectByExtension,
+	type FileType,
+} from "../../lib/detect.js";
 
 export interface FileData {
 	name: string;

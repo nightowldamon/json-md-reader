@@ -1,10 +1,10 @@
 import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
 	oneDark,
 	oneLight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
 import { parseMarkdown } from "../../../lib/markdown.js";
 import { FrontmatterCard } from "./FrontmatterCard.tsx";
 

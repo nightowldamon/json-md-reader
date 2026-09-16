@@ -1,2 +1,70 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Build output
 dist/
+dist-web/
+*.tsbuildinfo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+credentials.json
+
+# npm/yarn/pnpm auth + logs
+.npmrc
+.yarnrc
+.yarnrc.yml
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Caches
+.cache/
+.vite/
+.turbo/
+.eslintcache
+coverage/
+*.lcov
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows / Linux
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*~
+
+# Editors & IDEs
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+
+# AI assistant local state
+.claude/settings.local.json
+.cursor/
+.aider*
+
+# Local scratch
+*.local
+tmp/
+scratch/

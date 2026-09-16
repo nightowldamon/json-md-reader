@@ -40,7 +40,10 @@ function coerce(val: string): unknown {
 	const num = Number(val);
 	if (!Number.isNaN(num) && val !== "") return num;
 	// Strip surrounding quotes
-	if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+	if (
+		(val.startsWith('"') && val.endsWith('"')) ||
+		(val.startsWith("'") && val.endsWith("'"))
+	) {
 		return val.slice(1, -1);
 	}
 	return val;

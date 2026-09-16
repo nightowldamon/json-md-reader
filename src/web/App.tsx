@@ -1,7 +1,7 @@
 import { FileDropZone } from "./components/FileDropZone.tsx";
-import { ThemeToggle } from "./components/ThemeToggle.tsx";
 import { JsonViewer } from "./components/json/JsonViewer.tsx";
 import { MarkdownViewer } from "./components/markdown/MarkdownViewer.tsx";
+import { ThemeToggle } from "./components/ThemeToggle.tsx";
 import { useFileReader } from "./hooks/useFileReader.ts";
 import { useTheme } from "./hooks/useTheme.ts";
 

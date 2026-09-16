@@ -6,6 +6,9 @@
   "bin": {
     "jmd": "./dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build:cli": "tsup",
     "build:web": "vite build",
@@ -14,6 +17,7 @@
     "dev:web": "vite",
     "test": "vitest run",
     "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/"
   },
@@ -24,7 +28,7 @@
     "reader",
     "pretty-print"
   ],
-  "author": "",
+  "author": "nightowldamon",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.6.2",

@@ -36,31 +36,29 @@ export function FileDropZone({ onFile }: Props) {
 	);
 
 	return (
-		<div
-			onDrop={handleDrop}
-			onDragOver={handleDragOver}
-			onDragLeave={handleDragLeave}
-			onClick={handleClick}
-			onKeyDown={(e) => {
-				if (e.key === "Enter" || e.key === " ") handleClick();
-			}}
-			role="button"
-			tabIndex={0}
-			className={`flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-16 text-center transition-colors cursor-pointer ${
-				dragging
-					? "border-blue-500 bg-blue-50 dark:bg-blue-950"
-					: "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
-			}`}
-		>
-			<div className="text-4xl mb-4 text-gray-400">
-				{dragging ? "+" : "{}"}
-			</div>
-			<p className="text-lg font-medium text-gray-700 dark:text-gray-300">
-				Drop a JSON or Markdown file here
-			</p>
-			<p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-				or click to browse
-			</p>
+		<>
+			<button
+				type="button"
+				onDrop={handleDrop}
+				onDragOver={handleDragOver}
+				onDragLeave={handleDragLeave}
+				onClick={handleClick}
+				className={`flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed p-16 text-center transition-colors cursor-pointer ${
+					dragging
+						? "border-blue-500 bg-blue-50 dark:bg-blue-950"
+						: "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+				}`}
+			>
+				<span className="text-4xl mb-4 text-gray-400">
+					{dragging ? "+" : "{}"}
+				</span>
+				<span className="text-lg font-medium text-gray-700 dark:text-gray-300">
+					Drop a JSON or Markdown file here
+				</span>
+				<span className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+					or click to browse
+				</span>
+			</button>
 			<input
 				ref={inputRef}
 				type="file"
@@ -68,6 +66,6 @@ export function FileDropZone({ onFile }: Props) {
 				onChange={handleInputChange}
 				className="hidden"
 			/>
-		</div>
+		</>
 	);
 }
